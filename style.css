@@ -1,3 +1,6 @@
+body {
+  overflow-x: hidden;
+}
 img {
   display: block;
   width: 100%;

@@ -81,13 +81,15 @@ function createGallery(inputBreed, breed) {
     })
     .then((data) => {
       if (data.status === "success") {
-        galleryTitle.textContent = `${capitalizeWord(inputBreed)}:`;
+        galleryTitle.innerHTML = `<a class="btn btn-success back-to-top" href="#top"><i class="fa fa-arrow-up" aria-hidden="true"></i> </a> ${capitalizeWord(inputBreed)}:`;
         data.message.forEach((url, ind) => {
           let html = `<img class="gallery-item" src="${url}" alt="${capitalizeWord(inputBreed)} picture">`;
 
           gallery.innerHTML += html;
         });
       }
+
+      gallery.scrollIntoView();
     })
     .catch((e) => {
       console.log(e);
