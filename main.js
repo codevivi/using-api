@@ -1,1 +1,107 @@
-'use strict'
+"use strict";
+const breedSelectForm = document.getElementById("breed-select-form");
+const selectEl = document.getElementById("select-breed");
+const breedInputForm = document.getElementById("breed-input-form");
+const breedInput = document.getElementById("breed");
+const outputBySelect = document.getElementById("output-by-select");
+const outputByInput = document.getElementById("output-by-input");
+const gallery = document.getElementById("gallery");
+const galleryTitle = document.getElementById("gallery-title");
+
+breedInputForm.addEventListener("submit", (e) => {
+  getPictureByBreed(e, outputByInput);
+});
+breedSelectForm.addEventListener("submit", (e) => {
+  getPictureByBreed(e, outputBySelect);
+});
+
+fetch("https://dog.ceo/api/breeds/list/all")
+  .then((res) => {
+    return res.json();
+  })
+  .then((data) => {
+    if (data.status === "success") {
+      console.log(data);
+      for (let prop in data.message) {
+        let breed = prop;
+        let subbreedArr = data.message[breed];
+        breed = capitalizeWord(breed);
+        selectEl.innerHTML += `<option value=${breed}>${breed}</option>`;
+        subbreedArr.forEach((subBreed) => {
+          subBreed = capitalizeWord(subBreed);
+          let breedAndSub = `${breed} ${subBreed}`;
+          selectEl.innerHTML += `<option value="${breedAndSub}">${breedAndSub}</option>`;
+        });
+      }
+    }
+  })
+  .catch((e) => {
+    console.log(e);
+  });
+
+function getPictureByBreed(e, output) {
+  //also finds if subbreed provided (2 words);
+  e.preventDefault();
+  let inputBreed = getFormData(e.target).breed.trim();
+  let breed = inputBreed.toLowerCase().replace(" ", "/");
+  if (!inputBreed) {
+    output.innerHtml = `<span class="text-danger">Search field is empty</span>`;
+    e.target.reset();
+    return;
+  }
+  fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
+    .then((res) => {
+      if (res.statusText === "Not Found") {
+        output.innerHTML = `<span class="error-msg text-danger">Nuotrauka nerasta</span>`;
+        e.target.reset();
+        throw new Error("Nuotrauka nerasta");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      let html = `
+         <img src="${data.message}" alt="${inputBreed} picture">
+                    <div class="caption">
+                        <p>I am ${capitalizeWord(inputBreed)}!</p>
+                        <button onclick="createGallery('${inputBreed}','${breed}')" class="btn btn-success mb-4" type="button">Show more pictures</button>
+                    </div>
+        `;
+      output.innerHTML = html;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+function createGallery(inputBreed, breed) {
+  gallery.innerHTML = "";
+  galleryTitle.textContent = "";
+  fetch(`https://dog.ceo/api/breed/${breed}/images`)
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      if (data.status === "success") {
+        galleryTitle.textContent = `${capitalizeWord(inputBreed)}:`;
+        data.message.forEach((url, ind) => {
+          let html = `<img class="gallery-item" src="${url}" alt="${capitalizeWord(inputBreed)} picture">`;
+
+          gallery.innerHTML += html;
+        });
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+function capitalizeWord(word) {
+  word = word.toLowerCase().charAt(0).toUpperCase() + word.slice(1);
+  return word;
+}
+function getFormData(form) {
+  const formData = new FormData(form);
+  let data = {};
+  for (const [key, value] of formData) {
+    data[key] = value;
+  }
+  return data;
+}

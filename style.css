@@ -1,0 +1,65 @@
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+section {
+  text-align: center;
+}
+.cap {
+  text-transform: capitalize;
+}
+.one-picture,
+.thumbnail {
+  width: 90%;
+  max-width: 350px;
+  min-height: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.error-msg {
+  display: block;
+  padding: 15%;
+  background-color: white;
+}
+.gallery-title {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: white;
+  padding: 1em 0;
+  width: 100vw;
+  text-align: left;
+}
+
+/*https://css-tricks.com/seamless-responsive-photo-grid/*/
+#gallery {
+  line-height: 0;
+
+  -webkit-column-count: 3;
+  -webkit-column-gap: 0px;
+  -moz-column-count: 3;
+  -moz-column-gap: 0px;
+  column-count: 3;
+  column-gap: 0px;
+}
+.gallery-item {
+  width: 100% !important;
+  height: auto !important;
+}
+@media (max-width: 800px) {
+  #gallery {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+  }
+}
+@media (max-width: 400px) {
+  #gallery {
+    -moz-column-count: 1;
+    -webkit-column-count: 1;
+    column-count: 1;
+  }
+}
