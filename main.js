@@ -98,8 +98,6 @@ function createGallery(inputBreed, breed) {
           });
         }
       }
-
-      gallery.scrollIntoView();
     })
     .catch((e) => {
       console.log(e);
