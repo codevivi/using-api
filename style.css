@@ -62,6 +62,13 @@ section {
   padding: 1em 0;
   background-color: black;
   text-align: center;
+  width: 90%;
+  margin: auto;
+}
+#gallery-pagination {
+  text-align: center;
+  margin: auto;
+  overflow-x: scroll;
 }
 
 /*https://css-tricks.com/seamless-responsive-photo-grid/*/
@@ -79,7 +86,6 @@ section {
   -moz-column-gap: 0px;
   column-count: 3;
   column-gap: 0px;
-  overflow-x: scroll;
 }
 .gallery-item {
   width: 100% !important;
