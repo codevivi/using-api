@@ -7,6 +7,9 @@ const outputBySelect = document.getElementById("output-by-select");
 const outputByInput = document.getElementById("output-by-input");
 const gallery = document.getElementById("gallery");
 const galleryTitle = document.getElementById("gallery-title");
+const galleryPageLimit = 12;
+const galleryPagination = document.getElementById("gallery-pagination");
+const currentPage = 0;
 
 breedInputForm.addEventListener("submit", (e) => {
   getPictureByBreed(e, outputByInput);
@@ -15,6 +18,7 @@ breedSelectForm.addEventListener("submit", (e) => {
   getPictureByBreed(e, outputBySelect);
 });
 
+//get list of breeds and create select options
 fetch("https://dog.ceo/api/breeds/list/all")
   .then((res) => {
     return res.json();
@@ -82,11 +86,15 @@ function createGallery(inputBreed, breed) {
     .then((data) => {
       if (data.status === "success") {
         galleryTitle.innerHTML = `<a class="btn btn-success back-to-top" href="#top"><i class="fa fa-arrow-up" aria-hidden="true"></i> </a> ${capitalizeWord(inputBreed)}:`;
-        data.message.forEach((url, ind) => {
-          let html = `<img class="gallery-item" src="${url}" alt="${capitalizeWord(inputBreed)} picture">`;
+        if (data.message.length > 24) {
+          createPaginatedGallery(data.message);
+        } else {
+          data.message.forEach((url, ind) => {
+            let html = `<img class="gallery-item" src="${url}" alt="${capitalizeWord(inputBreed)} picture">`;
 
-          gallery.innerHTML += html;
-        });
+            gallery.innerHTML += html;
+          });
+        }
       }
 
       gallery.scrollIntoView();
@@ -94,6 +102,43 @@ function createGallery(inputBreed, breed) {
     .catch((e) => {
       console.log(e);
     });
+}
+function createPaginatedGallery(urlList) {
+  galleryPagination.innerHTML = ` <li id="prev" class="page-item disabled">
+                        <button class="page-link" type="button" tabindex="-1">Previous</button>
+                    </li>`;
+  let urlChunks = arrayToChunks(urlList, galleryPageLimit);
+  console.log(urlChunks);
+
+  for (let i = 1; i < urlChunks.length + 1; i++) {
+    galleryPagination.innerHTML += `
+         <li class="page-item ${i === 1 ? "active" : ""}"><button type="button" class="page-link">${i}</button></li>`;
+  }
+
+  galleryPagination.innerHTML += `
+    <li id="next" class="page-item">
+    <button class="page-link" type="button">Next</button>
+</li>`;
+  chooseAndRenderPage(urlChunks[currentPage]);
+}
+function chooseAndRenderPage(urlList) {
+  gallery.innerHTML = "";
+  urlList.forEach((url) => {
+    gallery.innerHTML += `<img class="gallery-item" src="${url}" alt="dog picture">`;
+  });
+}
+function arrayToChunks(arr, chunkLen) {
+  let urlChunks = [];
+  for (let i = 0; i < arr.length; i += chunkLen) {
+    let chunk = [];
+    for (let j = i; j < i + chunkLen; j++) {
+      if (arr[j]) {
+        chunk.push(arr[j]);
+      }
+    }
+    urlChunks.push(chunk);
+  }
+  return urlChunks;
 }
 function capitalizeWord(word) {
   word = word.toLowerCase().charAt(0).toUpperCase() + word.slice(1);
