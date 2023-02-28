@@ -66,11 +66,11 @@ section {
 
 /*https://css-tricks.com/seamless-responsive-photo-grid/*/
 #gallery {
-  background-image: url("./assets/paws-6757808_1280.png");
-  background-repeat: no-repeat;
-  background-size: auto;
-  background-position: bottom center;
-  padding-bottom: 200px;
+  /* background-image: url("./assets/paws-6757808_1280.png"); */
+  /* background-repeat: no-repeat; */
+  /* background-size: auto; */
+  /* background-position: bottom center; */
+  /* padding-bottom: 200px; */
   line-height: 0;
 
   -webkit-column-count: 3;
