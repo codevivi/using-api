@@ -7,9 +7,10 @@ const outputBySelect = document.getElementById("output-by-select");
 const outputByInput = document.getElementById("output-by-input");
 const gallery = document.getElementById("gallery");
 const galleryTitle = document.getElementById("gallery-title");
-const galleryPageLimit = 12;
+const galleryPageLimit = 6;
 const galleryPagination = document.getElementById("gallery-pagination");
-const currentPage = 0;
+let currentPage = 1;
+let urlChunks = [];
 
 breedInputForm.addEventListener("submit", (e) => {
   getPictureByBreed(e, outputByInput);
@@ -86,8 +87,9 @@ function createGallery(inputBreed, breed) {
     .then((data) => {
       if (data.status === "success") {
         galleryTitle.innerHTML = `<a class="btn btn-success back-to-top" href="#top"><i class="fa fa-arrow-up" aria-hidden="true"></i> </a> ${capitalizeWord(inputBreed)}:`;
-        if (data.message.length > 24) {
-          createPaginatedGallery(data.message);
+        if (data.message.length > galleryPageLimit) {
+          urlChunks = arrayToChunks(data.message, galleryPageLimit);
+          createPaginatedGallery(currentPage);
         } else {
           data.message.forEach((url, ind) => {
             let html = `<img class="gallery-item" src="${url}" alt="${capitalizeWord(inputBreed)} picture">`;
@@ -103,30 +105,31 @@ function createGallery(inputBreed, breed) {
       console.log(e);
     });
 }
-function createPaginatedGallery(urlList) {
-  galleryPagination.innerHTML = ` <li id="prev" class="page-item disabled">
-                        <button class="page-link" type="button" tabindex="-1">Previous</button>
+function createPaginatedGallery(page) {
+  currentPage = page;
+  galleryPagination.innerHTML = ` <li id="prev" class="page-item ${page <= 1 ? "disabled" : ""}">
+                        <button class="page-link" type="button" onClick="createPaginatedGallery(${currentPage - 1})" tabindex="-1">Previous</button>
                     </li>`;
-  let urlChunks = arrayToChunks(urlList, galleryPageLimit);
-  console.log(urlChunks);
-
+  console.log(urlChunks, "**********chunks");
   for (let i = 1; i < urlChunks.length + 1; i++) {
     galleryPagination.innerHTML += `
-         <li class="page-item ${i === 1 ? "active" : ""}"><button type="button" class="page-link">${i}</button></li>`;
+         <li class="page-item ${i === page ? "disabled" : ""}"><button onClick="createPaginatedGallery(${i})" type="button" class="page-link">${i}</button></li>`;
   }
 
   galleryPagination.innerHTML += `
     <li id="next" class="page-item">
-    <button class="page-link" type="button">Next</button>
+    <button class="page-link ${page >= urlChunks.length ? "disabled" : ""}"  onClick="createPaginatedGallery(${currentPage + 1})"  type="button">Next</button>
 </li>`;
-  chooseAndRenderPage(urlChunks[currentPage]);
+  chooseAndRenderPage(urlChunks, page);
+
+  function chooseAndRenderPage(urlList, page) {
+    gallery.innerHTML = "";
+    urlList[page - 1].forEach((url) => {
+      gallery.innerHTML += `<img class="gallery-item" src="${url}" alt="dog picture">`;
+    });
+  }
 }
-function chooseAndRenderPage(urlList) {
-  gallery.innerHTML = "";
-  urlList.forEach((url) => {
-    gallery.innerHTML += `<img class="gallery-item" src="${url}" alt="dog picture">`;
-  });
-}
+
 function arrayToChunks(arr, chunkLen) {
   let urlChunks = [];
   for (let i = 0; i < arr.length; i += chunkLen) {

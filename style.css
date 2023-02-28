@@ -1,6 +1,21 @@
 body {
   overflow-x: hidden;
+  background-color: black;
 }
+h1 {
+  background-color: black;
+  color: white;
+  padding: 2rem;
+  position: relative;
+  top: -1rem;
+  margin-bottom: 2rem;
+}
+.container {
+  color: white;
+  background-color: black;
+  padding: 0;
+}
+
 img {
   display: block;
   width: 100%;
@@ -12,15 +27,21 @@ section {
 .cap {
   text-transform: capitalize;
 }
+.label {
+  font-weight: bold;
+  color: black;
+}
 .one-picture,
 .thumbnail {
-  width: 90%;
+  width: 100%;
   max-width: 350px;
   min-height: 500px;
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-color: rgb(213, 255, 222);
+  color: black;
 }
 .error-msg {
   display: block;
@@ -31,20 +52,25 @@ section {
   position: sticky;
   top: 0;
   left: 0;
-  background-color: white;
+  background-color: black;
+  color: white;
   padding: 1em 0;
-  width: 100vw;
+  width: auto;
   text-align: left;
+}
+.gallery-nav {
+  padding: 1em 0;
+  background-color: black;
+  text-align: center;
 }
 
 /*https://css-tricks.com/seamless-responsive-photo-grid/*/
 #gallery {
   background-image: url("./assets/paws-6757808_1280.png");
   background-repeat: no-repeat;
-  background-size: 100vw 100vw;
+  background-size: auto;
   background-position: bottom center;
   padding-bottom: 200px;
-  border-top: 2px solid black;
   line-height: 0;
 
   -webkit-column-count: 3;
@@ -53,6 +79,7 @@ section {
   -moz-column-gap: 0px;
   column-count: 3;
   column-gap: 0px;
+  overflow-x: scroll;
 }
 .gallery-item {
   width: 100% !important;
