@@ -108,7 +108,7 @@ function createPaginatedGallery(page) {
   galleryPagination.innerHTML = ` <li id="prev" class="page-item ${page <= 1 ? "disabled" : ""}">
                         <button class="page-link" type="button" onClick="createPaginatedGallery(${currentPage - 1})" tabindex="-1">Previous</button>
                     </li>`;
-  for (let i = 0; i < urlChunks.length + 1; i++) {
+  for (let i = 1; i < urlChunks.length + 1; i++) {
     galleryPagination.innerHTML += `
          <li class="page-item ${i === page ? "disabled" : ""}"><button onClick="createPaginatedGallery(${i})" type="button" class="page-link">${i}</button></li>`;
   }
