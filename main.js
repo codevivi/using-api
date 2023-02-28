@@ -108,14 +108,22 @@ function createPaginatedGallery(page) {
   galleryPagination.innerHTML = ` <li id="prev" class="page-item ${page <= 1 ? "disabled" : ""}">
                         <button class="page-link" type="button" onClick="createPaginatedGallery(${currentPage - 1})" tabindex="-1">Previous</button>
                     </li>`;
-  for (let i = 1; i < urlChunks.length + 1; i++) {
+  // for (let i = 1; i < urlChunks.length + 1; i++) {
+  //   galleryPagination.innerHTML += `
+  //        <li class="page-item ${i === page ? "disabled" : ""}"><button onClick="createPaginatedGallery(${i})" type="button" class="page-link">${i}</button></li>`;
+  // }
+
+  if (page !== 1) {
     galleryPagination.innerHTML += `
-         <li class="page-item ${i === page ? "disabled" : ""}"><button onClick="createPaginatedGallery(${i})" type="button" class="page-link">${i}</button></li>`;
+          <li class="page-item ${page === 1 ? "disabled" : ""}"><button onClick="createPaginatedGallery(${1})" type="button" class="page-link">1</button></li>`;
   }
+  galleryPagination.innerHTML += `
+         <li class="page-item disabled"><button  type="button" class="page-link">${page}</button></li>`;
 
-  // galleryPagination.innerHTML += `
-  //        <li class="page-item disabled"><button  type="button" class="page-link">${page}</button></li>`;
-
+  if (page !== urlChunks.length) {
+    galleryPagination.innerHTML += `
+          <li class="page-item ${page === urlChunks.length ? "disabled" : ""}"><button onClick="createPaginatedGallery(${urlChunks.length})" type="button" class="page-link">${urlChunks.length}</button></li>`;
+  }
   galleryPagination.innerHTML += `
     <li id="next" class="page-item">
     <button class="page-link ${page >= urlChunks.length ? "disabled" : ""}"  onClick="createPaginatedGallery(${currentPage + 1})"  type="button">Next</button>
