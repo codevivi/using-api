@@ -2,14 +2,14 @@
 
 ## 📋 About
 
-2022-02-22 homework.
+2023-02-22 homework.
 
 Learning fetch and use data from external API
 **API used**: [https://dog.ceo/](https://dog.ceo/)
 
-🌐 **Site published at**: [https://codevivi.github.io/using-api](https://codevivi.github.io/using-api)
+![alt app screenshot](./assets/screenshot.png)
 
-📈 **Status**:Done
+🌐 **Site published at**: [https://codevivi.github.io/using-api](https://codevivi.github.io/using-api)
 
 🎯 **Goals:**
 
